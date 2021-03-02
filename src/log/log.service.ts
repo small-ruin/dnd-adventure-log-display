@@ -10,8 +10,8 @@ export class LogService {
         private repo: Repository<Log>
     ) {}
 
-    create(log): Log[] {
-        return this.repo.create(log);
+    create(log): Promise<Log[]> {
+        return this.repo.save(log);
     }
 
     findAll(): Promise<Log[]> {
