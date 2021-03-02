@@ -12,7 +12,7 @@ export class AdventureController {
     }
 
     @Post()
-    create(@Body('data') data: Adventure) {
+    create(@Body() data: Adventure) {
         return this.adventureService.create(data);
     }
 
