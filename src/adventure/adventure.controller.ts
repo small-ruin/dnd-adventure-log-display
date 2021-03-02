@@ -2,7 +2,7 @@ import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
 import Adventure from 'src/interface/Adventure';
 
-@Controller('adventure')
+@Controller('api/adventure')
 export class AdventureController {
     constructor(private readonly adventureService: AdventureService) {}
 

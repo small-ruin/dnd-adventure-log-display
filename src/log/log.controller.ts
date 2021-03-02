@@ -2,7 +2,7 @@ import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { LogService } from './log.service';
 import Log from '../interface/Log';
 
-@Controller('log')
+@Controller('api/log')
 export class LogController {
     constructor(private service: LogService) {}
     @Get()

@@ -11,9 +11,8 @@ export class AdventureService {
         private readonly repo: Repository<Adventure>
     ) {}
 
-    create(adv): Adventure[] {
-        return this.repo.create(adv);
-        
+    create(adv): Promise<Adventure[]> {
+        return this.repo.save<Adventure>(adv);
     }
     
     findAll(): Promise<Adventure[]> {

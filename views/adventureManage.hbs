@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战役管理</title>
+</head>
+<body>
+    <ul>
+        {{#each adventure}}
+        <li>{{this.name}}</li>
+        {{/each}}
+    </ul>
+    <Form action="javascript:void(0)">
+        <label for="name">战役名称</label><input name="name" id="name" />
+        <input onclick="createAdventure()" type="submit" value="提交" />
+    </Form>
+</body>
+<script>
+    function createAdventure() {
+        const input = document.querySelector('#name');
+        fetch('/api/adventure', { 
+            method: 'post',
+            body: JSON.stringify({name: input.value}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(function(res) {
+            if (res.data) {
+                if (res.data.code === '1') {
+                    location.reload();
+                } else {
+                    console.error('出错了!')
+                }
+            }
+        })
+    }
+</script>
+</html>

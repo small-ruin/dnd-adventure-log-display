@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Adventure } from '../adventure/adventure.entity';
 
 @Entity()
@@ -14,4 +14,7 @@ export class Log {
 
     @ManyToOne(() => Adventure, adventure => adventure.logs)
     adventure: Adventure;
+
+    @CreateDateColumn()
+    createdAt: string;
 }
