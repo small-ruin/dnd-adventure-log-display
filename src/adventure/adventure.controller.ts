@@ -16,12 +16,12 @@ export class AdventureController {
         return this.adventureService.create(data);
     }
 
-    @Get()
-    findLogs(@Param('id') id: string) {
-        return this.adventureService.findLogs(id);
+    @Get(':id')
+    find(@Param('id') id: string) {
+        return this.adventureService.find(id);
     }
 
-    @Delete()
+    @Delete(':id')
     remove(@Param('id') id: string) {
         return this.adventureService.remove(id);
     }

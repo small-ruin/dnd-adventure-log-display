@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, JoinColumn } from 'typeorm';
 import { Log } from '../log/log.entity';
 
 @Entity()
@@ -9,7 +9,8 @@ export class Adventure {
     @Column("varchar", { length: 30 })
     name: string;
 
-    @OneToMany(() => Log, log => log.adventure)
+    @OneToMany(() => Log, log => log.adventure, { eager: true })
+    @JoinColumn()
     logs: Log[];
 
     @CreateDateColumn()

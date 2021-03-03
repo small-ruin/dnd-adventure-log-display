@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from './log.entity';
+import { Adventure } from '../adventure/adventure.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class LogService {
     constructor(
         @InjectRepository(Log)
-        private repo: Repository<Log>
+        private repo: Repository<Log>,
+        @InjectRepository(Adventure)
+        private adventureRepo: Repository<Adventure>
     ) {}
 
-    create(log): Promise<Log[]> {
-        return this.repo.save(log);
+    async create(log): Promise<Adventure> {
+        const adventure = await this.adventureRepo.findOne(log.adventureId);
+        adventure.logs.push(log)
+        await this.repo.save(log);
+        return await this.adventureRepo.save(adventure);
     }
 
     findAll(): Promise<Log[]> {

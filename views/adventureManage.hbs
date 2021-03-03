@@ -8,7 +8,10 @@
 <body>
     <ul>
         {{#each adventure}}
-        <li>{{this.name}}</li>
+        <p>
+            {{this.name}}
+            <button onClick="removeAdventure({{this.id}})">remove</button>
+        </p>
         {{/each}}
     </ul>
     <Form action="javascript:void(0)">
@@ -16,16 +19,12 @@
         <input onclick="createAdventure()" type="submit" value="提交" />
     </Form>
 </body>
+<script src='/static/js/request.js'></script>
 <script>
     function createAdventure() {
         const input = document.querySelector('#name');
-        fetch('/api/adventure', { 
-            method: 'post',
-            body: JSON.stringify({name: input.value}),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(function(res) {
+        
+        post('/api/adventure', {name: input.value}).then(function(res) {
             if (res.data) {
                 if (res.data.code === '1') {
                     location.reload();
@@ -34,6 +33,10 @@
                 }
             }
         })
+    }
+
+    function removeAdventure(id) {
+        remove('/api/adventure/' + id).then(() => location.reload())
     }
 </script>
 </html>

@@ -19,6 +19,10 @@ export class AdventureService {
         return this.repo.find();
     }
 
+    find(id): Promise<Adventure> {
+        return this.repo.findOne(id);
+    }
+
     async findLogs(id: string): Promise<Log[]> {
         return (await this.repo.findOne(id)).logs;
     }
