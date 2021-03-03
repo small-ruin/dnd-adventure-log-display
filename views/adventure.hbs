@@ -10,28 +10,10 @@
 
     <div>
         {{#each adventure.logs}}
-            <p>{{this.name}}<button onclick="deleteLog({{this.id}})">remove</button></p>
+            <p>
+                <a href="/log/{{this.id}}">{{this.name}}</a>
+            </p>
         {{/each}}
     </div>
-
-    <Form action="javascript:void(0)">
-        <label for="name">log名称</label><input name="name" id="name" />
-        <input onclick="createLog({{adventure.id}})" type="submit" value="提交" />
-    </Form>
-    <script src="/static/js/request.js"></script>
-    <script>
-        get('/api/adventure/1');
-        function createLog(id) {
-            var name = document.getElementById('name').value;
-            post('/api/log/', { name, adventureId: id, content: '111' }).then(function() {
-                location.reload();
-            })
-        }
-        function deleteLog(id) {
-            remove('/api/log/' + id).then(function() {
-                location.reload();
-            });
-        }
-    </script>
 </body>
 </html>

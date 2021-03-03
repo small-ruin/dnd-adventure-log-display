@@ -9,7 +9,7 @@
     <p>所有的冒险都在这里：</p>
     <ul>
         {{#each adventure}}
-        <li>{{this.name}}</li>
+        <li><a href="/adventure/{{this.id}}">{{this.name}}</a></li>
         {{/each}}
     </ul>
 </body>
