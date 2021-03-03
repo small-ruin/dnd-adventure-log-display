@@ -3,40 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>战役管理</title>
+    <title>战役log</title>
 </head>
 <body>
-    <ul>
-        {{#each adventure}}
-        <p>
-            {{this.name}}
-            <button onClick="removeAdventure({{this.id}})">remove</button>
-        </p>
-        {{/each}}
-    </ul>
-    <Form action="javascript:void(0)">
-        <label for="name">战役名称</label><input name="name" id="name" />
-        <input onclick="createAdventure()" type="submit" value="提交" />
-    </Form>
-</body>
-<script src='/static/js/request.js'></script>
-<script>
-    function createAdventure() {
-        const input = document.querySelector('#name');
-        
-        post('/api/adventure', {name: input.value}).then(function(res) {
-            if (res.data) {
-                if (res.data.code === '1') {
-                    location.reload();
-                } else {
-                    console.error('出错了!')
-                }
-            }
-        })
-    }
+    <h1>{{ adventure.name }}</h1> 
 
-    function removeAdventure(id) {
-        remove('/api/adventure/' + id).then(() => location.reload())
-    }
-</script>
+    <div>
+        {{#each adventure.logs}}
+            <p>
+                <a href="/log/{{this.id}}">{{this.name}}</a>
+                <button onclick="deleteLog({{this.id}})">remove</button></p>
+        {{/each}}
+    </div>
+
+    <Form action="javascript:void(0)">
+        <label for="name">log名称</label><input name="name" id="name" />
+        <input onclick="createLog({{adventure.id}})" type="submit" value="提交" />
+    </Form>
+    <script src="/static/js/request.js"></script>
+    <script>
+        function createLog(id) {
+            var name = document.getElementById('name').value;
+            post('/api/log/', { name, adventureId: id, content: '111' }).then(function() {
+                location.reload();
+            })
+        }
+        function deleteLog(id) {
+            remove('/api/log/' + id).then(function() {
+                location.reload();
+            });
+        }
+    </script>
+</body>
 </html>
