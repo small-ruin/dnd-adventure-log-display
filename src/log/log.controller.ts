@@ -11,11 +11,11 @@ export class LogController {
     }
 
     @Post()
-    create(@Body('data') data: Log) {
+    create(@Body() data: Log) {
         return this.service.create(data);
     }
     
-    @Delete()
+    @Delete(':id')
     remove(@Param('id') id: string) {
         return this.service.remove(id);
     }
