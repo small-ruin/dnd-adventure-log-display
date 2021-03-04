@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from './log.entity';
 import { Adventure } from '../adventure/adventure.entity';
 import { Repository } from 'typeorm';
+import { convertToHtml } from 'mammoth';
 
 @Injectable()
 export class LogService {
@@ -13,11 +14,28 @@ export class LogService {
         private adventureRepo: Repository<Adventure>
     ) {}
 
-    async create(log): Promise<Adventure> {
-        const adventure = await this.adventureRepo.findOne(log.adventureId);
-        adventure.logs.push(log)
-        await this.repo.save(log);
+    async create(id, logs): Promise<Adventure> {
+        const adventure = await this.adventureRepo.findOne(id);
+        logs = await Promise.all(logs.map(log =>{
+            return new Promise((resolve, reject) => {
+                convertToHtml({ buffer: log.buffer }).then(res => {
+                    const name = log.originalname.replace(/.docx|.docc/, '');
+                    resolve({
+                        name,
+                        content: res.value,
+                    })
+                }, reject);
+            })
+        }));
+        logs.forEach(log => {
+            adventure.logs.push(log);
+        })
+        await Promise.all(logs.map(log => this.repo.save(log)));
         return await this.adventureRepo.save(adventure);
+    }
+
+    find(id): Promise<Log> {
+        return this.repo.findOne(id);
     }
 
     findAll(): Promise<Log[]> {

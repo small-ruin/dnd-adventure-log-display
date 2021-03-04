@@ -1,7 +1,6 @@
-import { Controller, Get, Render, Param, HttpException, Res } from "@nestjs/common";
+import { Controller, Get, Render, Param, Res } from "@nestjs/common";
 import { Response } from 'express';
 import { AdventureService } from './adventure.service';
-import { Adventure } from "./adventure.entity";
 
 @Controller('adventure')
 export class AdventureViewController {
