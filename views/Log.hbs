@@ -4,10 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>log</title>
+    <style>
+        .wrapper {
+            display: flex;
+            justify-content: center;
+        }
+        .wrapper > div {
+            max-width: 1366px;
+
+        }
+        .wrapper font {
+            line-height: 18px;
+        }
+        .title {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{log.name}}</h1>
-    <h2>创建时间：{{log.createdAt}}</h2>
-    {{{log.content}}}
+    <h1 class="title">{{log.name}}</h1>
+    <h2 class="title">创建时间：{{log.createdAt}}</h2>
+    <div class="wrapper">
+        <div>
+            {{{log.content}}}
+        </div>
+    </div>
 </body>
 </html>

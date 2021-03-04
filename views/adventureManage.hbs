@@ -8,6 +8,11 @@
 <body>
     <h1>{{ adventure.name }}</h1> 
 
+    <Form action="/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
+        <input type="file" name="logs" multiple />
+        <input type="submit" value="提交">
+    </Form>
+
     <div>
         {{#each adventure.logs}}
             <p>
@@ -15,20 +20,8 @@
                 <button onclick="deleteLog({{this.id}})">remove</button></p>
         {{/each}}
     </div>
-
-    <Form action="/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
-        <input type="file" name="logs" multiple />
-        {{!-- <input onclick="createLog({{adventure.id}})" type="submit" value="提交" /> --}}
-        <input type="submit" value="提交">
-    </Form>
     <script src="/static/js/request.js"></script>
     <script>
-        function createLog(id) {
-            var name = document.getElementById('name').value;
-            post('/api/log/', { name, adventureId: id, content: '111' }).then(function() {
-                location.reload();
-            })
-        }
         function deleteLog(id) {
             remove('/api/log/' + id).then(function() {
                 location.reload();
