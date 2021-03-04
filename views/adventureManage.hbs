@@ -16,9 +16,10 @@
         {{/each}}
     </div>
 
-    <Form action="javascript:void(0)">
-        <label for="name">log名称</label><input name="name" id="name" />
-        <input onclick="createLog({{adventure.id}})" type="submit" value="提交" />
+    <Form action="/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
+        <input type="file" name="logs" multiple />
+        {{!-- <input onclick="createLog({{adventure.id}})" type="submit" value="提交" /> --}}
+        <input type="submit" value="提交">
     </Form>
     <script src="/static/js/request.js"></script>
     <script>
