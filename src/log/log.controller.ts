@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Delete, Param, Body, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, UseInterceptors, UploadedFiles, Redirect } from '@nestjs/common';
 import { LogService } from './log.service';
-import Log from '../interface/Log';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/log')
@@ -14,7 +13,8 @@ export class LogController {
     @Post(":id")
     @UseInterceptors(FilesInterceptor('logs'))
     create(@UploadedFiles() logs, @Param('id') id) {
-        return this.service.create(id, logs);
+        this.service.create(id, logs);
+        Redirect('/adventure/' + id + 'manage');
     }
     
     @Delete(':id')

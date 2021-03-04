@@ -6,6 +6,11 @@
     <title>战役管理</title>
 </head>
 <body>
+    <Form action="javascript:void(0)">
+        <label for="name">战役名称</label><input name="name" id="name" />
+        <input onclick="createAdventure()" type="submit" value="提交" />
+    </Form>
+
     <ul>
         {{#each adventure}}
         <p>
@@ -14,10 +19,6 @@
         </p>
         {{/each}}
     </ul>
-    <Form action="javascript:void(0)">
-        <label for="name">战役名称</label><input name="name" id="name" />
-        <input onclick="createAdventure()" type="submit" value="提交" />
-    </Form>
 </body>
 <script src='/static/js/request.js'></script>
 <script>
@@ -25,13 +26,7 @@
         const input = document.querySelector('#name');
         
         post('/api/adventure', {name: input.value}).then(function(res) {
-            if (res.data) {
-                if (res.data.code === '1') {
-                    location.reload();
-                } else {
-                    console.error('出错了!')
-                }
-            }
+            location.reload();
         })
     }
 
