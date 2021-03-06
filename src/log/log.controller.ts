@@ -10,6 +10,11 @@ export class LogController {
         return this.service.findAll();
     }
 
+    @Get(":id")
+    find(@Param() id:string) {
+        return this.service.find(id);
+    }
+
     @Post(":id")
     @UseInterceptors(FilesInterceptor('logs'))
     create(@UploadedFiles() logs, @Param('id') id) {
