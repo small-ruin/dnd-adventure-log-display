@@ -38,6 +38,10 @@ export class LogService {
         return this.repo.findOne(id);
     }
 
+    findListByAdventureId(adventureId) {
+        return this.repo.find({ select: ['id', 'name', 'createdAt'], where: { adventure: adventureId } })
+    }
+
     findAll(): Promise<Log[]> {
         return this.repo.find();
     }

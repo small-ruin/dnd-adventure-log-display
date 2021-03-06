@@ -1,14 +1,23 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
 import Adventure from 'src/interface/Adventure';
+import { LogService } from 'src/log/log.service';
 
 @Controller('api/adventure')
 export class AdventureController {
-    constructor(private readonly adventureService: AdventureService) {}
+    constructor(
+        private readonly adventureService: AdventureService,
+        private readonly logService: LogService
+    ) {}
 
     @Get()
     findAll() {
         return this.adventureService.findAll();
+    }
+
+    @Get(':id/logs')
+    findLogs(@Param('id') id: string) {
+        return this.logService.findListByAdventureId(id);
     }
 
     @Post()
