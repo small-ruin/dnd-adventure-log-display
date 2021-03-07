@@ -6,3 +6,5 @@ export default interface Adventure {
     logs?: Log[],
     createTime: Date,
 }
+
+export { Adventure }

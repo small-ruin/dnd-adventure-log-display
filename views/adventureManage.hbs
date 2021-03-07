@@ -17,7 +17,10 @@
         {{#each logs}}
             <p>
                 <a href="/log/{{this.id}}">{{this.name}}</a>
-                <button onclick="deleteLog({{this.id}})">remove</button></p>
+                <button onclick="deleteLog({{this.id}})">remove</button>
+                <button onclick="changeOrder({{this.id}}, -1)">↑</button>
+                <button onclick="changeOrder({{this.id}}, 1)">↓</button>
+            </p>
         {{/each}}
     </div>
     <script src="/static/js/request.js"></script>
@@ -26,6 +29,12 @@
             remove('/api/log/' + id).then(function() {
                 location.reload();
             });
+        }
+        function changeOrder(logId, step) {
+            let adventureId = {{adventure.id}}
+            post('/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
+                location.reload();
+            })
         }
     </script>
 </body>

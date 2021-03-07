@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
-import Adventure from 'src/interface/Adventure';
+import { Adventure, ChangeOrderDTO } from 'src/interface';
 import { LogService } from 'src/log/log.service';
 
 @Controller('api/adventure')
@@ -33,5 +33,10 @@ export class AdventureController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.adventureService.remove(id);
+    }
+
+    @Post('/changeOrder')
+    changeOrder(@Body() data: ChangeOrderDTO) {
+      return this.adventureService.changeOrder(data);
     }
 }
