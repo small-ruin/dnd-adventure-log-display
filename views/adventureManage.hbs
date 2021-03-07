@@ -14,7 +14,7 @@
     </Form>
 
     <div>
-        {{#each adventure.logs}}
+        {{#each logs}}
             <p>
                 <a href="/log/{{this.id}}">{{this.name}}</a>
                 <button onclick="deleteLog({{this.id}})">remove</button></p>

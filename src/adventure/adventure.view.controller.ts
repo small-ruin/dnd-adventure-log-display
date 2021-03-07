@@ -28,9 +28,12 @@ export class AdventureViewController {
 
     @Get(':id/manage')
     @Render('adventureManage')
-    async getLogManage(@Param() params) {
+    async getLogManage(@Param('id') id: string) {
+        const logs = await this.logService.findListByAdventureId(id);
+        const adventure = await this.adventureService.find(id); 
         return {
-            adventure: await this.adventureService.find(params.id)
+            logs,
+            adventure,
         }
     }
 

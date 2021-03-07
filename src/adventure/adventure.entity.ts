@@ -9,6 +9,12 @@ export class Adventure {
     @Column("varchar", { length: 30 })
     name: string;
 
+    @Column({
+      type: "text",
+      default: "",
+    })
+    order: string;
+
     @OneToMany(() => Log, log => log.adventure)
     @JoinColumn()
     logs: Log[];
