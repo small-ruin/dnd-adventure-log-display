@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
 import { Adventure, ChangeOrderDTO, SearchDTO } from 'src/interface';
 import { LogService } from 'src/log/log.service';
@@ -27,6 +27,9 @@ export class AdventureController {
 
     @Get('/search')
     search(@Query() query: SearchDTO) {
+        if (!query.key.trim()) {
+            throw new HttpException('关键词不能为空', HttpStatus.BAD_REQUEST);
+        }
         return this.adventureService.search(query);
     }
 
