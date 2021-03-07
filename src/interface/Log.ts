@@ -5,3 +5,5 @@ export default interface Log {
     createTime: Date,
     udpateTime: Date,
 }
+
+export { Log }
