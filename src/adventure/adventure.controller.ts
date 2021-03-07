@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Query } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
-import { Adventure, ChangeOrderDTO } from 'src/interface';
+import { Adventure, ChangeOrderDTO, SearchDTO } from 'src/interface';
 import { LogService } from 'src/log/log.service';
 
 @Controller('api/adventure')
@@ -23,6 +23,11 @@ export class AdventureController {
     @Post()
     create(@Body() data: Adventure) {
         return this.adventureService.create(data);
+    }
+
+    @Get('/search')
+    search(@Query() query: SearchDTO) {
+        return this.adventureService.search(query);
     }
 
     @Get(':id')

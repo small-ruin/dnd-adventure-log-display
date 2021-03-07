@@ -1,15 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Like, Repository } from 'typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
-import { ChangeOrderDTO } from 'src/interface';
+import { ChangeOrderDTO, SearchDTO } from 'src/interface';
 
 @Injectable()
 export class AdventureService {
     constructor(
         @InjectRepository(Adventure)
-        private readonly repo: Repository<Adventure>
+        private readonly repo: Repository<Adventure>,
+        @InjectRepository(Log)
+        private readonly logRepo: Repository<Log>
     ) {}
 
     create(adv): Promise<Adventure[]> {
@@ -48,5 +50,14 @@ export class AdventureService {
 
       adventure.order = orderArr.join(',');
       return this.repo.save(adventure); 
+    }
+
+    async search({id, key}: SearchDTO) {
+        const adventure = await this.find(id);
+        const logs = await this.logRepo.find({
+            adventure: { id },
+            content: Like(`%${key}%`),
+        })
+        return logs;
     }
 }
