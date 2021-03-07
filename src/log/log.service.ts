@@ -23,14 +23,15 @@ export class LogService {
                     resolve({
                         name,
                         content: res.value,
+                        adventure,
                     })
                 }, reject);
             })
         }));
-        logs.forEach(log => {
-            adventure.logs.push(log);
-        })
-        await Promise.all(logs.map(log => this.repo.save(log)));
+
+        logs = await Promise.all(logs.map(log => this.repo.save(log)));
+        const order = logs.map(i => i.id).join(',');
+        adventure.order += order;
         return await this.adventureRepo.save(adventure);
     }
 
@@ -38,8 +39,18 @@ export class LogService {
         return this.repo.findOne(id);
     }
 
-    findListByAdventureId(adventureId) {
-        return this.repo.find({ select: ['id', 'name', 'createdAt'], where: { adventure: adventureId } })
+    async findListByAdventureId(adventureId) {
+        const orderArr = (await this.adventureRepo.findOne(adventureId)).order?.split(',').filter(i => i);
+        
+        const logs = await this.repo.find({ select: ['id', 'name', 'createdAt'], where: { adventure: adventureId } })
+
+        if (logs && orderArr) {
+          const sorted = [];
+          orderArr.forEach(i => sorted.push(logs.find(log => log.id === +i)));
+          return sorted;
+        }
+
+        return logs;
     }
 
     findAll(): Promise<Log[]> {
