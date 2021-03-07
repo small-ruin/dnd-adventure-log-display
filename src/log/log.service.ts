@@ -58,6 +58,15 @@ export class LogService {
     }
 
     async remove(id: string): Promise<Log> {
+        const log = await this.repo.findOne({
+            relations: ['adventure'],
+            where: { id },
+        });
+        const adventure = await this.adventureRepo.findOne(log.adventure.id);
+        const orderArr = adventure.order.split(',');
+        orderArr.splice(orderArr.findIndex(i => +i === log.id), 1);
+        adventure.order = orderArr.join(',');
+        await this.adventureRepo.save(adventure);
         return this.repo.remove(await this.repo.findOne(id));
     }
 }
