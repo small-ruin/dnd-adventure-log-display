@@ -31,7 +31,11 @@ export class LogService {
 
         logs = await Promise.all(logs.map(log => this.repo.save(log)));
         const order = logs.map(i => i.id).join(',');
-        adventure.order += order;
+        if (adventure.order === '') {
+            adventure.order = order;
+        } else {
+            adventure.order += ',' + order;
+        }
         return await this.adventureRepo.save(adventure);
     }
 
