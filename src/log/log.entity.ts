@@ -12,7 +12,7 @@ export class Log {
     @Column("blob")
     content: string;
 
-    @ManyToOne(() => Adventure, adventure => adventure.logs, { eager: true })
+    @ManyToOne(() => Adventure, adventure => adventure.logs, { eager: true, onDelete: 'CASCADE' })
     adventure: Adventure;
 
     @CreateDateColumn()
