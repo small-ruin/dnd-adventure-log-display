@@ -14,7 +14,7 @@
     <ul>
         {{#each adventure}}
         <p>
-            <a href="/adventure/{{this.id}}/manage">{{this.name}}</a>
+            <a href="{{baseurl}}/adventure/{{this.id}}/manage">{{this.name}}</a>
             <button onClick="removeAdventure({{this.id}})">remove</button>
         </p>
         {{/each}}
@@ -25,13 +25,13 @@
     function createAdventure() {
         const input = document.querySelector('#name');
         
-        post('/api/adventure', {name: input.value}).then(function(res) {
+        post('{{baseurl}}/api/adventure', {name: input.value}).then(function(res) {
             location.reload();
         })
     }
 
     function removeAdventure(id) {
-        remove('/api/adventure/' + id).then(() => location.reload())
+        remove('{{baseurl}}/api/adventure/' + id).then(() => location.reload())
     }
 </script>
 </html>
