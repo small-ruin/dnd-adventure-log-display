@@ -9,4 +9,5 @@ readFile(join(process.cwd(), 'views/request.hbs'), (err, data) => {
 
     handlebars.registerPartial('script', data.toString());
     handlebars.registerHelper('baseurl', () => '');
+    handlebars.registerHelper('apiBaseurl', () => '');
 });
