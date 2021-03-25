@@ -23,7 +23,7 @@
             </p>
         {{/each}}
     </div>
-    <script src="/static/js/request.js"></script>
+    {{> script }}
     <script>
         function deleteLog(id) {
             remove('/api/log/' + id).then(function() {
