@@ -8,7 +8,7 @@
 <body>
     <h1>{{ adventure.name }}</h1> 
 
-    <Form action="/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
+    <Form action="{{baseurl}}/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
         <input type="file" name="logs" multiple />
         <input type="submit" value="提交">
     </Form>
@@ -16,7 +16,7 @@
     <div>
         {{#each logs}}
             <p>
-                <a href="/log/{{this.id}}">{{this.name}}</a>
+                <a href="{{baseurl}}/log/{{this.id}}">{{this.name}}</a>
                 <button onclick="deleteLog({{this.id}})">remove</button>
                 <button onclick="changeOrder({{this.id}}, -1)">↑</button>
                 <button onclick="changeOrder({{this.id}}, 1)">↓</button>
@@ -26,13 +26,13 @@
     {{> script }}
     <script>
         function deleteLog(id) {
-            remove('/api/log/' + id).then(function() {
+            remove('{{baseurl}}/api/log/' + id).then(function() {
                 location.reload();
             });
         }
         function changeOrder(logId, step) {
             let adventureId = {{adventure.id}}
-            post('/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
+            post('{{baseurl}}/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
                 location.reload();
             })
         }
