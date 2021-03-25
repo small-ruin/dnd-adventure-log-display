@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { LogService } from "src/log/log.service";
 import { AdventureService } from './adventure.service';
 
-@Controller('adventure')
+@Controller('hbs/adventure')
 export class AdventureViewController {
     constructor(
         private readonly adventureService: AdventureService,
