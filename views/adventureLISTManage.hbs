@@ -25,13 +25,13 @@
     function createAdventure() {
         const input = document.querySelector('#name');
         
-        post('{{apiBaseurl}}/api/adventure', {name: input.value}).then(function(res) {
+        post('{{baseurl}}/api/adventure', {name: input.value}).then(function(res) {
             location.reload();
         })
     }
 
     function removeAdventure(id) {
-        remove('{{apiBaseurl}}/api/adventure/' + id).then(() => location.reload())
+        remove('{{baseurl}}/api/adventure/' + id).then(() => location.reload())
     }
 </script>
 </html>

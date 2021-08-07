@@ -26,13 +26,13 @@
     {{> script }}
     <script>
         function deleteLog(id) {
-            remove('{{apiBaseurl}}/api/log/' + id).then(function() {
+            remove('{{baseurl}}/api/log/' + id).then(function() {
                 location.reload();
             });
         }
         function changeOrder(logId, step) {
             let adventureId = {{adventure.id}}
-            post('{{apiBaseurl}}/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
+            post('{{baseurl}}/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
                 location.reload();
             })
         }
