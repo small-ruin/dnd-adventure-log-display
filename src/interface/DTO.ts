@@ -1,12 +1,12 @@
 interface ChangeOrderDTO {
-    adventureId: number,
-    logId: number,
-    step: number,
+  adventureId: number;
+  logId: number;
+  step: number;
 }
 
 interface SearchDTO {
-    id: number,
-    key: string,
+  id: number;
+  key: string;
 }
 
-export { ChangeOrderDTO, SearchDTO }
+export { ChangeOrderDTO, SearchDTO };

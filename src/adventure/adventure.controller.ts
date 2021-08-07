@@ -1,50 +1,60 @@
-import { Controller, Get, Post, Delete, Param, Body, Query, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Body,
+  Query,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AdventureService } from './adventure.service';
 import { Adventure, ChangeOrderDTO, SearchDTO } from 'src/interface';
 import { LogService } from 'src/log/log.service';
 
 @Controller('api/adventure')
 export class AdventureController {
-    constructor(
-        private readonly adventureService: AdventureService,
-        private readonly logService: LogService
-    ) {}
+  constructor(
+    private readonly adventureService: AdventureService,
+    private readonly logService: LogService,
+  ) {}
 
-    @Get()
-    findAll() {
-        return this.adventureService.findAll();
-    }
+  @Get()
+  findAll() {
+    return this.adventureService.findAll();
+  }
 
-    @Get(':id/logs')
-    findLogs(@Param('id') id: string) {
-        return this.logService.findListByAdventureId(id);
-    }
+  @Get(':id/logs')
+  findLogs(@Param('id') id: string) {
+    return this.logService.findListByAdventureId(id);
+  }
 
-    @Post()
-    create(@Body() data: Adventure) {
-        return this.adventureService.create(data);
-    }
+  @Post()
+  create(@Body() data: Adventure) {
+    return this.adventureService.create(data);
+  }
 
-    @Get('/search')
-    search(@Query() query: SearchDTO) {
-        if (!query.key.trim()) {
-            throw new HttpException('关键词不能为空', HttpStatus.BAD_REQUEST);
-        }
-        return this.adventureService.search(query);
+  @Get('/search')
+  search(@Query() query: SearchDTO) {
+    if (!query.key.trim()) {
+      throw new HttpException('关键词不能为空', HttpStatus.BAD_REQUEST);
     }
+    return this.adventureService.search(query);
+  }
 
-    @Get(':id')
-    find(@Param('id') id: string) {
-        return this.adventureService.find(id);
-    }
+  @Get(':id')
+  find(@Param('id') id: string) {
+    return this.adventureService.find(id);
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.adventureService.remove(id);
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.adventureService.remove(id);
+  }
 
-    @Post('/changeOrder')
-    changeOrder(@Body() data: ChangeOrderDTO) {
-      return this.adventureService.changeOrder(data);
-    }
+  @Post('/changeOrder')
+  changeOrder(@Body() data: ChangeOrderDTO) {
+    return this.adventureService.changeOrder(data);
+  }
 }

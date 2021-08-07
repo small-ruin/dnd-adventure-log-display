@@ -8,21 +8,20 @@ import { LogModule } from './log/log.module';
 import { Adventure } from './adventure/adventure.entity';
 import { Log } from './log/log.entity';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      "type": "sqlite",
-      "entities": [Adventure, Log],
-      "database": "./db/dnd-adventure-log-display.prod.db",
-      synchronize: true
+      type: 'sqlite',
+      entities: [Adventure, Log],
+      database: './db/dnd-adventure-log-display.prod.db',
+      synchronize: true,
     }),
     AdventureModule,
-    LogModule
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private readonly connection: Connection) { }
+  constructor(private readonly connection: Connection) {}
 }

@@ -1,63 +1,62 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, Like, Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
 import { ChangeOrderDTO, SearchDTO } from 'src/interface';
 
 @Injectable()
 export class AdventureService {
-    constructor(
-        @InjectRepository(Adventure)
-        private readonly repo: Repository<Adventure>,
-        @InjectRepository(Log)
-        private readonly logRepo: Repository<Log>
-    ) {}
+  constructor(
+    @InjectRepository(Adventure)
+    private readonly repo: Repository<Adventure>,
+    @InjectRepository(Log)
+    private readonly logRepo: Repository<Log>,
+  ) {}
 
-    create(adv): Promise<Adventure[]> {
-        return this.repo.save<Adventure>(adv);
-    }
-    
-    findAll(): Promise<Adventure[]> {
-        return this.repo.find();
-    }
+  create(adv): Promise<Adventure[]> {
+    return this.repo.save<Adventure>(adv);
+  }
 
-    find(id): Promise<Adventure> {
-        return this.repo.findOne(id);
-    }
+  findAll(): Promise<Adventure[]> {
+    return this.repo.find();
+  }
 
-    async findLogs(id: string): Promise<Log[]> {
-        return (await this.repo.findOne(id)).logs;
-    }
-    
-    async remove(id: string): Promise<Adventure> {
-        return this.repo.remove(await this.repo.findOne(id));
-    }
+  find(id): Promise<Adventure> {
+    return this.repo.findOne(id);
+  }
 
-    async changeOrder({adventureId, logId, step} : ChangeOrderDTO) {
-      const adventure = await this.find(adventureId);
-      const orderArr = adventure.order.split(',');
-      const logIdIndex = orderArr.findIndex(i => +i === logId);
-      const targetIndex = logIdIndex + step;
+  async findLogs(id: string): Promise<Log[]> {
+    return (await this.repo.findOne(id)).logs;
+  }
 
-      if (targetIndex < 0 || targetIndex > orderArr.length - 1) {
-          throw new HttpException('step error', HttpStatus.BAD_REQUEST);
-      }
+  async remove(id: string): Promise<Adventure> {
+    return this.repo.remove(await this.repo.findOne(id));
+  }
 
-      const tem = logId;
-      orderArr[logIdIndex] = orderArr[targetIndex];
-      orderArr[targetIndex] = tem + '';
+  async changeOrder({ adventureId, logId, step }: ChangeOrderDTO) {
+    const adventure = await this.find(adventureId);
+    const orderArr = adventure.order.split(',');
+    const logIdIndex = orderArr.findIndex((i) => +i === logId);
+    const targetIndex = logIdIndex + step;
 
-      adventure.order = orderArr.join(',');
-      return this.repo.save(adventure); 
+    if (targetIndex < 0 || targetIndex > orderArr.length - 1) {
+      throw new HttpException('step error', HttpStatus.BAD_REQUEST);
     }
 
-    async search({id, key}: SearchDTO) {
-        const adventure = await this.find(id);
-        const logs = await this.logRepo.find({
-            adventure: { id },
-            content: Like(`%${key}%`),
-        })
-        return logs;
-    }
+    const tem = logId;
+    orderArr[logIdIndex] = orderArr[targetIndex];
+    orderArr[targetIndex] = tem + '';
+
+    adventure.order = orderArr.join(',');
+    return this.repo.save(adventure);
+  }
+
+  async search({ id, key }: SearchDTO) {
+    const logs = await this.logRepo.find({
+      adventure: { id },
+      content: Like(`%${key}%`),
+    });
+    return logs;
+  }
 }

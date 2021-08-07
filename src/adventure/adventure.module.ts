@@ -8,9 +8,9 @@ import { Log } from '../log/log.entity';
 import { LogService } from 'src/log/log.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Adventure, Log])],
-    controllers: [AdventureController, AdventureViewController],
-    providers: [AdventureService, LogService],
-    exports: [AdventureService],
+  imports: [TypeOrmModule.forFeature([Adventure, Log])],
+  controllers: [AdventureController, AdventureViewController],
+  providers: [AdventureService, LogService],
+  exports: [AdventureService],
 })
 export class AdventureModule {}
