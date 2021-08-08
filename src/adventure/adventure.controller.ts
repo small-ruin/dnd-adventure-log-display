@@ -26,8 +26,12 @@ export class AdventureController {
   }
 
   @Get(':id/logs')
-  findLogs(@Param('id') id: string) {
-    return this.logService.findListByAdventureId(id);
+  findLogs(@Param('id') id: string, @Query() { latest }) {
+    if (latest) {
+      return this.logService.findLatestByAdventureId(id);
+    } else {
+      return this.logService.findListByAdventureId(id);
+    }
   }
 
   @Post()
@@ -36,11 +40,17 @@ export class AdventureController {
   }
 
   @Get('/search')
-  search(@Query() query: SearchDTO) {
-    if (!query.key.trim()) {
+  async search(@Query() { id, name, key, noContent = false }: SearchDTO) {
+    if (!id && !name) {
+      throw new HttpException('搜索功能需要战役信息', HttpStatus.BAD_REQUEST);
+    }
+    if (!key?.trim()) {
       throw new HttpException('关键词不能为空', HttpStatus.BAD_REQUEST);
     }
-    return this.adventureService.search(query);
+    if (!id && name) {
+      id = await this.adventureService.getIdByName(name);
+    }
+    return this.adventureService.search({ id, key, noContent });
   }
 
   @Get(':id')

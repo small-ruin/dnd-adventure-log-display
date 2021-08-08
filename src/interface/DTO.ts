@@ -5,7 +5,9 @@ interface ChangeOrderDTO {
 }
 
 interface SearchDTO {
-  id: number;
+  id?: number;
+  name?: string;
+  noContent?: boolean; // 是否携带内容
   key: string;
 }
 

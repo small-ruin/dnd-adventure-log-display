@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from './log.entity';
 import { Adventure } from '../adventure/adventure.entity';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, getManager, Repository } from 'typeorm';
 import { convertToHtml } from 'mammoth';
 
 @Injectable()
@@ -46,9 +46,13 @@ export class LogService {
   }
 
   async findListByAdventureId(adventureId) {
-    const orderArr = (await this.adventureRepo.findOne(adventureId)).order
-      ?.split(',')
-      .filter((i) => i);
+    const adventure = await this.adventureRepo.findOne(adventureId)
+
+    if (!adventure) {
+      return [];
+    }
+
+    const orderArr = adventure?.order?.split(',').filter((i) => i);
 
     const logs = await this.repo.find({
       select: ['id', 'name', 'createdAt'],
@@ -62,6 +66,24 @@ export class LogService {
     }
 
     return logs;
+  }
+
+  async findLatestByAdventureId(adventureId) {
+    const query = await getManager()
+      .createQueryBuilder()
+      .select(['id', 'name'])
+      .addSelect('Max("createdAt")', 'createdAt')
+      .from(
+        (qb) =>
+          qb
+            .select('*')
+            .from(Log, 'log')
+            .where('log.adventureId =' + adventureId),
+        'log2',
+      )
+      .getQuery();
+
+    return await getManager().query(query);
   }
 
   findAll(): Promise<Log[]> {

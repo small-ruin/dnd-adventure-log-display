@@ -52,10 +52,22 @@ export class AdventureService {
     return this.repo.save(adventure);
   }
 
-  async search({ id, key }: SearchDTO) {
+  async getIdByName(name) {
+    if (!name) return null;
+    return (await this.repo.find({ name: Like(`%${name}%`) }))[0]?.id;
+  }
+
+  async search({ id, key, noContent }: SearchDTO) {
+    const select: (keyof Log)[] = ['id', 'name', 'createdAt'];
+    if (!noContent) {
+      select.push('content');
+    }
     const logs = await this.logRepo.find({
-      adventure: { id },
-      content: Like(`%${key}%`),
+      select,
+      where: {
+        adventure: { id },
+        content: Like(`%${key}%`),
+      }
     });
     return logs;
   }
