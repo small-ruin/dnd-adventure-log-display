@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from './log.entity';
 import { Adventure } from '../adventure/adventure.entity';
-import { createQueryBuilder, getManager, Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { convertToHtml } from 'mammoth';
 
 @Injectable()
