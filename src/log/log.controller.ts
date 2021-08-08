@@ -27,8 +27,7 @@ export class LogController {
   @Post(':id')
   @UseInterceptors(FilesInterceptor('logs'))
   create(@UploadedFiles() logs, @Param('id') id) {
-    this.service.create(id, logs);
-    Redirect('/adventure/' + id + 'manage');
+    return this.service.create(id, logs);
   }
 
   @Delete(':id')

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from './log.entity';
 import { Adventure } from '../adventure/adventure.entity';
-import { getManager, Repository } from 'typeorm';
+import { FindManyOptions, getManager, Repository } from 'typeorm';
 import { convertToHtml } from 'mammoth';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class LogService {
     return this.repo.findOne(id);
   }
 
-  async findListByAdventureId(adventureId) {
+  async findListByAdventureId(adventureId, limit?) {
     const adventure = await this.adventureRepo.findOne(adventureId)
 
     if (!adventure) {
@@ -54,15 +54,23 @@ export class LogService {
 
     const orderArr = adventure?.order?.split(',').filter((i) => i);
 
-    const logs = await this.repo.find({
+    const findOption: FindManyOptions<Log> = {
       select: ['id', 'name', 'createdAt'],
       where: { adventure: adventureId },
-    });
+    }
+    if (limit) {
+      findOption.skip = 0
+      findOption.take = limit
+      findOption.order = { 'createdAt': 'DESC' }
+    }
 
-    if (logs && orderArr) {
+    const logs = await this.repo.find(findOption);
+
+    // 有limit的固定取录入最迟的10个
+    if (logs && orderArr && !limit) {
       const sorted = [];
       orderArr.forEach((i) => sorted.push(logs.find((log) => log.id === +i)));
-      return sorted;
+      return sorted.filter(i => i);
     }
 
     return logs;

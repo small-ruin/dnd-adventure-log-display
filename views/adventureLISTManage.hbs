@@ -14,8 +14,8 @@
     <ul>
         {{#each adventure}}
         <p>
-            <a href="{{baseurl}}/adventure/{{this.id}}/manage">{{this.name}}</a>
-            <button onClick="removeAdventure({{this.id}})">remove</button>
+            <a href="{{baseurl}}/hbs/adventure/{{this.id}}/manage">{{this.name}}</a>
+            <button onClick="removeAdventure({{this.id}}, {{this.name}})">remove</button>
         </p>
         {{/each}}
     </ul>
@@ -30,8 +30,10 @@
         })
     }
 
-    function removeAdventure(id) {
-        remove('{{baseurl}}/api/adventure/' + id).then(() => location.reload())
+    function removeAdventure(id, name) {
+        if (confirm('确定要删除' + name + '吗？')) {
+            remove('{{baseurl}}/api/adventure/' + id).then(() => location.reload())
+        }
     }
 </script>
 </html>

@@ -25,12 +25,33 @@ export class AdventureController {
     return this.adventureService.findAll();
   }
 
+  @Get('/id')
+  async getId(@Query() { name }) {
+    try {
+      const id = await this.adventureService.getIdByName(name)
+      if (id) {
+        return { id }
+      } else {
+        return {
+          code: 0,
+          message: '未找到'
+        }
+      }
+    } catch (e) {
+      return {
+        code: 0,
+        message: e
+      }
+    }
+  }
+
+
   @Get(':id/logs')
-  findLogs(@Param('id') id: string, @Query() { latest }) {
+  findLogs(@Param('id') id: string, @Query() { latest, limit }) {
     if (latest) {
       return this.logService.findLatestByAdventureId(id);
     } else {
-      return this.logService.findListByAdventureId(id);
+      return this.logService.findListByAdventureId(id, limit);
     }
   }
 

@@ -8,15 +8,15 @@
 <body>
     <h1>{{ adventure.name }}</h1> 
 
-    <Form action="{{baseurl}}/api/log/{{adventure.id}}" method="POST" enctype="multipart/form-data">
-        <input type="file" name="logs" multiple />
-        <input type="submit" value="提交">
+    <Form action="javascript:void(0)" method="POST" enctype="multipart/form-data">
+        <input type="file" id="file" name="logs" multiple />
+        <input type="button" value="提交" onclick="submitFile()">
     </Form>
 
     <div>
         {{#each logs}}
             <p>
-                <a href="{{baseurl}}/log/{{this.id}}">{{this.name}}</a>
+                <a href="{{baseurl}}/hbs/log/{{this.id}}">{{this.name}}</a>
                 <button onclick="deleteLog({{this.id}})">remove</button>
                 <button onclick="changeOrder({{this.id}}, -1)">↑</button>
                 <button onclick="changeOrder({{this.id}}, 1)">↓</button>
@@ -35,6 +35,25 @@
             post('{{baseurl}}/api/adventure/changeOrder', { adventureId, logId, step }).then(function() {
                 location.reload();
             })
+        }
+        function submitFile() {
+            let formData = new FormData();
+            Array
+                .from(document.querySelector('#file').files)
+                .forEach(file => formData.append("logs", file));
+
+            fetch('{{baseurl}}/api/log/{{adventure.id}}', {
+                method: "POST", 
+                body: formData
+            }).then(res => {
+                console.log(res, res.ok)
+                if (res.ok) {
+                    location.reload()
+                }
+            }).catch(e => {
+                console.error(e)
+                alert('出错了')
+            }); 
         }
     </script>
 </body>

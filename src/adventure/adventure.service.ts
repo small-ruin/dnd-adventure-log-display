@@ -54,7 +54,7 @@ export class AdventureService {
 
   async getIdByName(name) {
     if (!name) return null;
-    return (await this.repo.find({ name: Like(`%${name}%`) }))[0]?.id;
+    return (await this.repo.findOne({ name: Like(`%${name}%`) }))?.id;
   }
 
   async search({ id, key, noContent }: SearchDTO) {
