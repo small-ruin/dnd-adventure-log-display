@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { FindConditions, Like, Repository } from 'typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
 import { ChangeOrderDTO, SearchDTO } from 'src/interface';
@@ -57,18 +57,25 @@ export class AdventureService {
     return (await this.repo.findOne({ name: Like(`%${name}%`) }))?.id;
   }
 
-  async search({ id, key, noContent }: SearchDTO) {
+  async search({ id, key, noContent, log }: SearchDTO) {
     const select: (keyof Log)[] = ['id', 'name', 'createdAt'];
     if (!noContent) {
       select.push('content');
     }
+
+    const where: FindConditions<Log> = {
+      adventure: { id },
+      content: Like(`%${key}%`),
+    }
+    if (log) {
+      where.name = Like(`%${log}%`)
+    }
+
     const logs = await this.logRepo.find({
       select,
-      where: {
-        adventure: { id },
-        content: Like(`%${key}%`),
-      }
+      where,
     });
+
     return logs;
   }
 }

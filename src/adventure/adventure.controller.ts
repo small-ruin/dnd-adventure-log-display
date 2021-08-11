@@ -61,7 +61,7 @@ export class AdventureController {
   }
 
   @Get('/search')
-  async search(@Query() { id, name, key, noContent = false }: SearchDTO) {
+  async search(@Query() { id, name, key, noContent = false, log }: SearchDTO) {
     if (!id && !name) {
       throw new HttpException('搜索功能需要战役信息', HttpStatus.BAD_REQUEST);
     }
@@ -71,7 +71,7 @@ export class AdventureController {
     if (!id && name) {
       id = await this.adventureService.getIdByName(name);
     }
-    return this.adventureService.search({ id, key, noContent });
+    return this.adventureService.search({ id, key, noContent, log });
   }
 
   @Get(':id')

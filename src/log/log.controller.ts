@@ -6,7 +6,6 @@ import {
   Param,
   UseInterceptors,
   UploadedFiles,
-  Redirect,
 } from '@nestjs/common';
 import { LogService } from './log.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -26,8 +25,8 @@ export class LogController {
 
   @Post(':id')
   @UseInterceptors(FilesInterceptor('logs'))
-  create(@UploadedFiles() logs, @Param('id') id) {
-    return this.service.create(id, logs);
+  async create(@UploadedFiles() logs, @Param('id') id) {
+    return await this.service.create(id, logs);
   }
 
   @Delete(':id')

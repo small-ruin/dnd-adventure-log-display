@@ -9,6 +9,7 @@ interface SearchDTO {
   name?: string;
   noContent?: boolean; // 是否携带内容
   key: string;
+  log: string;
 }
 
 export { ChangeOrderDTO, SearchDTO };
