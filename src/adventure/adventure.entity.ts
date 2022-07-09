@@ -5,6 +5,7 @@ import {
   OneToMany,
   CreateDateColumn,
   JoinColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Log } from '../log/log.entity';
 
@@ -22,10 +23,16 @@ export class Adventure {
   })
   order: string;
 
+  @Column({ type: 'text', default: '' })
+  announcement: string
+
   @OneToMany(() => Log, (log) => log.adventure)
   @JoinColumn()
   logs: Log[];
 
   @CreateDateColumn()
   createAt: string;
+
+  @UpdateDateColumn()
+  updateAt: string;
 }

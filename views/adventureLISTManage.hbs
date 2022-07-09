@@ -15,7 +15,7 @@
         {{#each adventure}}
         <p>
             <a href="{{baseurl}}/hbs/adventure/{{this.id}}/manage">{{this.name}}</a>
-            <button onClick="removeAdventure({{this.id}}, {{this.name}})">remove</button>
+            <button onClick="removeAdventure({{this.id}}, '{{this.name}}')">remove</button>
         </p>
         {{/each}}
     </ul>

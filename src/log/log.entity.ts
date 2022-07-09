@@ -18,6 +18,10 @@ export class Log {
   @Column('blob')
   content: string;
 
+  // 1-docx, 2-txt
+  @Column('int')
+  type: number;
+
   @ManyToOne(() => Adventure, (adventure) => adventure.logs, {
     eager: true,
     onDelete: 'CASCADE',
