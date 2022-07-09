@@ -26,12 +26,15 @@
 
     <div>
         {{#each logs}}
-            <p>
+            <div>
                 <a href="{{baseurl}}/hbs/log/{{this.id}}">{{this.name}}</a>
                 <button onclick="deleteLog({{this.id}})">remove</button>
                 <button onclick="changeOrder({{this.id}}, -1)">↑</button>
                 <button onclick="changeOrder({{this.id}}, 1)">↓</button>
-            </p>
+                <br />
+                <input id="log-id-{{id}}-name" />
+                <button onclick="updateName({{id}})">update name</button>
+            </div>
         {{/each}}
     </div>
     {{> script }}
@@ -40,6 +43,10 @@
             remove('{{baseurl}}/api/log/' + id).then(function() {
                 location.reload();
             });
+        }
+        function updateName(id) {
+            var name = document.querySelector('#log-id-' + id + '-name').value
+            patch('{{baseurl}}/api/log/' + id, {name}).then(() => location.reload())
         }
         function changeOrder(logId, step) {
             let adventureId = {{adventure.id}}

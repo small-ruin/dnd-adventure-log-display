@@ -45,6 +45,10 @@ export class LogService {
     return this.repo.findOneBy({id});
   }
 
+  updateName(id, name) {
+    return this.repo.update(id, { name })
+  }
+
   async findListByAdventureId(adventureId: number, limit?) {
     const adventure = await this.adventureRepo.findOneBy({id: adventureId})
 
