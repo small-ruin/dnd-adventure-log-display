@@ -19,7 +19,7 @@ export class LogController {
   }
 
   @Get(':id')
-  find(@Param() id: string) {
+  find(@Param('id') id: number) {
     return this.service.find(id);
   }
 
@@ -30,7 +30,7 @@ export class LogController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.service.remove(id);
   }
 }

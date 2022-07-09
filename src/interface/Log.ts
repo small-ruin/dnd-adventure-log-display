@@ -1,5 +1,5 @@
 export default interface Log {
-  id: string;
+  id: number;
   name: string;
   content: string;
   createTime: Date;

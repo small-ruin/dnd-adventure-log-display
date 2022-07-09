@@ -7,12 +7,13 @@ import { AdventureModule } from './adventure/adventure.module';
 import { LogModule } from './log/log.module';
 import { Adventure } from './adventure/adventure.entity';
 import { Log } from './log/log.entity';
+import { Member } from './member/member.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      entities: [Adventure, Log],
+      entities: [Adventure, Log, Member],
       database: './db/dnd-adventure-log-display.prod.db',
       synchronize: true,
     }),

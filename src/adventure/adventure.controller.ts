@@ -47,7 +47,7 @@ export class AdventureController {
 
 
   @Get(':id/logs')
-  findLogs(@Param('id') id: string, @Query() { latest, limit }) {
+  findLogs(@Param('id') id: number, @Query() { latest, limit }) {
     if (latest) {
       return this.logService.findLatestByAdventureId(id);
     } else {
@@ -75,12 +75,12 @@ export class AdventureController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
+  find(@Param('id') id: number) {
     return this.adventureService.find(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.adventureService.remove(id);
   }
 

@@ -1,7 +1,7 @@
 import Log from './Log';
 
 export default interface Adventure {
-  id: string;
+  id: number;
   name: string;
   logs?: Log[];
   createTime: Date;

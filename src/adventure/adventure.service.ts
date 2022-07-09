@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, Like, Repository } from 'typeorm';
+import { Like, Repository, FindOptionsWhere } from 'typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
 import { ChangeOrderDTO, SearchDTO } from 'src/interface';
@@ -23,15 +23,15 @@ export class AdventureService {
   }
 
   find(id): Promise<Adventure> {
-    return this.repo.findOne(id);
+    return this.repo.findOneBy({id});
   }
 
-  async findLogs(id: string): Promise<Log[]> {
-    return (await this.repo.findOne(id)).logs;
+  async findLogs(id: number): Promise<Log[]> {
+    return (await this.repo.findOneBy({id}))?.logs;
   }
 
-  async remove(id: string): Promise<Adventure> {
-    return this.repo.remove(await this.repo.findOne(id));
+  async remove(id: number): Promise<Adventure> {
+    return this.repo.remove(await this.repo.findOneBy({id}));
   }
 
   async changeOrder({ adventureId, logId, step }: ChangeOrderDTO) {
@@ -54,7 +54,7 @@ export class AdventureService {
 
   async getIdByName(name) {
     if (!name) return null;
-    return (await this.repo.findOne({ name: Like(`%${name}%`) }))?.id;
+    return (await this.repo.findOneBy({ name: Like(`%${name}%`) }))?.id;
   }
 
   async search({ id, key, noContent, log }: SearchDTO) {
@@ -63,7 +63,7 @@ export class AdventureService {
       select.push('content');
     }
 
-    const where: FindConditions<Log> = {
+    const where: FindOptionsWhere<Log> = {
       adventure: { id },
       content: Like(`%${key}%`),
     }

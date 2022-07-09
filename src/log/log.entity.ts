@@ -19,7 +19,7 @@ export class Log {
   content: string;
 
   // 1-docx, 2-txt
-  @Column('int')
+  @Column('int', { default: 1 })
   type: number;
 
   @ManyToOne(() => Adventure, (adventure) => adventure.logs, {

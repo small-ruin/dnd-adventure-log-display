@@ -15,12 +15,12 @@ export class LogService {
   ) {}
 
   async create(id, logs): Promise<Adventure> {
-    const adventure = await this.adventureRepo.findOne(id);
+    const adventure = await this.adventureRepo.findOneBy({id});
     logs = await Promise.all(
       logs.map((log) => {
         return new Promise((resolve, reject) => {
           convertToHtml({ buffer: log.buffer }).then((res) => {
-            const name = log.originalname.replace(/.docx|.docc/, '');
+            const name = decodeURI(log.originalname).replace(/.docx|.doc/, '') 
             resolve({
               name,
               content: res.value,
@@ -41,12 +41,12 @@ export class LogService {
     return await this.adventureRepo.save(adventure);
   }
 
-  find(id): Promise<Log> {
-    return this.repo.findOne(id);
+  find(id: number): Promise<Log> {
+    return this.repo.findOneBy({id});
   }
 
-  async findListByAdventureId(adventureId, limit?) {
-    const adventure = await this.adventureRepo.findOne(adventureId)
+  async findListByAdventureId(adventureId: number, limit?) {
+    const adventure = await this.adventureRepo.findOneBy({id: adventureId})
 
     if (!adventure) {
       return [];
@@ -56,7 +56,8 @@ export class LogService {
 
     const findOption: FindManyOptions<Log> = {
       select: ['id', 'name', 'createdAt'],
-      where: { adventure: adventureId },
+      where: { adventure: {id: +adventureId} },
+      relations: { adventure: true }
     }
     if (limit) {
       findOption.skip = 0
@@ -98,12 +99,12 @@ export class LogService {
     return this.repo.find();
   }
 
-  async remove(id: string): Promise<Log> {
+  async remove(id: number): Promise<Log> {
     const log = await this.repo.findOne({
       relations: ['adventure'],
       where: { id },
     });
-    const adventure = await this.adventureRepo.findOne(log.adventure.id);
+    const adventure = await this.adventureRepo.findOneBy({id: log.adventure.id});
     const orderArr = adventure.order.split(',');
     orderArr.splice(
       orderArr.findIndex((i) => +i === log.id),
@@ -111,6 +112,6 @@ export class LogService {
     );
     adventure.order = orderArr.join(',');
     await this.adventureRepo.save(adventure);
-    return this.repo.remove(await this.repo.findOne(id));
+    return this.repo.remove(await this.repo.findOneBy({id}));
   }
 }
