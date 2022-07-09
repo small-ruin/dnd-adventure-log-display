@@ -3,11 +3,14 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToMany,
   CreateDateColumn,
   JoinColumn,
   UpdateDateColumn,
+  JoinTable
 } from 'typeorm';
 import { Log } from '../log/log.entity';
+import { Member } from 'src/member/entities/member.entity';
 
 @Entity()
 export class Adventure {
@@ -29,6 +32,13 @@ export class Adventure {
   @OneToMany(() => Log, (log) => log.adventure)
   @JoinColumn()
   logs: Log[];
+
+  @ManyToMany(() => Member, {
+    cascade: true,
+    onDelete:"CASCADE",
+  })
+  @JoinTable()
+  members: Member[];
 
   @CreateDateColumn()
   createAt: string;

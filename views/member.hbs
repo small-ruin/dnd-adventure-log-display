@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>战役log</title>
+    <title>PC</title>
 </head>
 <body>
-    <h1>{{ adventure.name }}</h1> 
-    <div>{{ adventure.announcement }}</div>
+    <section>
+        <a href="{{baseurl}}/hbs/adventure">home</a>
+    </section>
     <div>
-        {{#each logs}}
+        {{#each pcs}}
             <p>
-                <a href="{{baseurl}}/log/{{this.id}}">{{this.name}}</a>
+                {{this.name}}
             </p>
         {{/each}}
     </div>

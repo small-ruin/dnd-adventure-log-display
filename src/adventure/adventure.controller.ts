@@ -8,6 +8,7 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { AdventureService } from './adventure.service';
 import { Adventure, ChangeOrderDTO, SearchDTO } from 'src/interface';
@@ -45,7 +46,6 @@ export class AdventureController {
     }
   }
 
-
   @Get(':id/logs')
   findLogs(@Param('id') id: number, @Query() { latest, limit }) {
     if (latest) {
@@ -53,6 +53,21 @@ export class AdventureController {
     } else {
       return this.logService.findListByAdventureId(id, limit);
     }
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() data: Adventure) {
+    return this.adventureService.update(id, data)
+  }
+
+  @Get(':id/pc/add')
+  addPc(@Param('id') id: number, @Query('pc') pc: number) {
+    this.adventureService.addPc(id, pc)
+  }
+
+  @Get(':id/pc/remove')
+  removePc(@Param('id') id: number, @Query('pc') pc: number) {
+    this.adventureService.removePc(id, pc)
   }
 
   @Post()

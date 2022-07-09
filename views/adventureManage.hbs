@@ -8,10 +8,21 @@
 <body>
     <h1>{{ adventure.name }}</h1> 
 
-    <Form action="javascript:void(0)" method="POST">
-        <input type="file" id="file" name="logs" multiple />
-        <input type="button" value="提交" onclick="submitFile()">
-    </Form>
+    <section class="update-adventure">
+        <input value={{adventure.name}} />
+        <br />
+        <textarea>{{ adventure.announcement }}</textarea>
+        <br />
+        <button onclick="update({{adventure.id}})">update</button>
+    </section>
+
+    <section class="log">
+        <Form action="javascript:void(0)" method="POST">
+            <input type="file" id="file" name="logs" multiple />
+            <input type="button" value="提交" onclick="submitFile()">
+        </Form>
+    </section>
+
 
     <div>
         {{#each logs}}
@@ -36,6 +47,12 @@
                 location.reload();
             })
         }
+        function update(id) {
+            var name = document.querySelector('.update-adventure input').value
+            var announcement = document.querySelector('.update-adventure textarea').value
+
+            patch('/api/adventure/' + id, {name, announcement}).then(() => location.reload())
+        }
         function submitFile() {
             let formData = new FormData();
             Array
@@ -43,7 +60,6 @@
                 .forEach(file => {
                     var blob = file.slice(0, file.size); 
                     newFile = new File([blob], encodeURI(file.name));
-                    console.log(file)
                     formData.append("logs", newFile)
                 });
 

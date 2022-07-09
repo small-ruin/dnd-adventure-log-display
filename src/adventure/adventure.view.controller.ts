@@ -1,6 +1,7 @@
 import { Controller, Get, Render, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { LogService } from 'src/log/log.service';
+import { MemberService } from 'src/member/member.service';
 import { AdventureService } from './adventure.service';
 
 @Controller('hbs/adventure')
@@ -8,6 +9,7 @@ export class AdventureViewController {
   constructor(
     private readonly adventureService: AdventureService,
     private readonly logService: LogService,
+    private readonly memberService: MemberService,
   ) {}
 
   @Get()
@@ -20,9 +22,10 @@ export class AdventureViewController {
 
   @Get('manage')
   @Render('adventureListManage')
-  async create() {
+  async manageGetAll() {
     return {
       adventure: await this.adventureService.findAll(),
+      pcs: await this.memberService.findAll()
     };
   }
 

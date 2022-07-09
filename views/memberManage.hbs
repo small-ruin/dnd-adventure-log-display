@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC管理</title>
+</head>
+<body>
+    <Form action="javascript:void(0)">
+        <label for="name">PC</label><input name="name" id="name" />
+        <input onclick="createPc()" type="submit" value="提交" />
+    </Form>
+
+    <ul>
+        {{#each pcs}}
+        <p>
+            {{this.name}}
+            <button onClick="removePc({{this.id}}, '{{this.name}}')">remove</button>
+            <input id="member-id-{{this.id}}">
+            <button onClick="updatePc({{this.id}}, '{{this.name}}')">update</button>
+        </p>
+        {{/each}}
+    </ul>
+</body>
+{{> script}}
+<script>
+    function createPc() {
+        const input = document.querySelector('#name');
+        
+        post('{{baseurl}}/api/member', {name: input.value}).then(function(res) {
+            location.reload();
+        })
+    }
+
+    function removePc(id, name) {
+        if (confirm('确定要删除' + name + '吗？')) {
+            remove('{{baseurl}}/api/member/' + id).then(() => location.reload())
+        }
+    }
+
+    function updatePc(id, name) {
+        var newName = document.querySelector('#member-id-' + id).value
+        if (confirm('确定要修改成' + newName + '吗？')) {
+            patch('{{baseurl}}/api/member/'+id, { name: newName})
+                .then(() => location.reload())
+        }
+    }
+</script>
+</html>

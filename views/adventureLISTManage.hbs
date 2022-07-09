@@ -7,16 +7,42 @@
 </head>
 <body>
     <Form action="javascript:void(0)">
-        <label for="name">战役名称</label><input name="name" id="name" />
+        <section>
+            <label for="name">战役名称</label>
+            <input name="name" id="name" />
+        </section>
+        <section>
+            <label for="announcement">公告</label>
+            <textarea id="announcement" name="announcement"></textarea>
+        </section>
         <input onclick="createAdventure()" type="submit" value="提交" />
     </Form>
 
     <ul>
         {{#each adventure}}
-        <p>
-            <a href="{{baseurl}}/hbs/adventure/{{this.id}}/manage">{{this.name}}</a>
-            <button onClick="removeAdventure({{this.id}}, '{{this.name}}')">remove</button>
-        </p>
+        <div style="margin: 20px">
+            <div style="margin: 10px 0">
+                <a href="{{baseurl}}/hbs/adventure/{{this.id}}/manage">{{this.name}}</a>
+                <button onClick="removeAdventure({{this.id}}, '{{this.name}}')">remove</button>
+            </div>
+
+            <div  style="margin: 10px 0">
+                {{#each members}}
+                    <div>
+                        {{name}} <button onclick="removePc({{../id}}, {{id}})">remove</button>
+                    </div>
+                {{/each}}
+            </div>
+
+            <div style="margin: 10px 0">
+                <select id="pc-id-{{id}}">
+                    {{#each ../pcs}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                </select>
+                <button onclick="addPc({{id}})">增加PC</button>
+            </div>
+        </div>
         {{/each}}
     </ul>
 </body>
@@ -24,8 +50,12 @@
 <script>
     function createAdventure() {
         const input = document.querySelector('#name');
+        const announcement = document.querySelector('#announcement');
         
-        post('{{baseurl}}/api/adventure', {name: input.value}).then(function(res) {
+        post('{{baseurl}}/api/adventure', {
+            name: input.value,
+            announcement: announcement.value
+        }).then(function(res) {
             location.reload();
         })
     }
@@ -34,6 +64,16 @@
         if (confirm('确定要删除' + name + '吗？')) {
             remove('{{baseurl}}/api/adventure/' + id).then(() => location.reload())
         }
+    }
+
+    function removePc(advId, pc) {
+        get('{{baseurl}}/api/adventure/' + advId + '/pc/remove?pc='+pc)
+            .then(() => location.reload())
+    }
+    function addPc(advId) {
+        const pc = document.querySelector('#pc-id-'+advId).value
+        get('{{baseurl}}/api/adventure/' + advId + '/pc/add?pc='+pc)
+            .then(() => location.reload())
     }
 </script>
 </html>

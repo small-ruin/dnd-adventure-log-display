@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
 import { LogService } from 'src/log/log.service';
+import { MemberService } from 'src/member/member.service';
+import { Member } from 'src/member/entities/member.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Adventure, Log])],
+  imports: [TypeOrmModule.forFeature([Adventure, Log, Member])],
   controllers: [AdventureController, AdventureViewController],
-  providers: [AdventureService, LogService],
+  providers: [AdventureService, LogService, MemberService],
   exports: [AdventureService],
 })
 export class AdventureModule {}

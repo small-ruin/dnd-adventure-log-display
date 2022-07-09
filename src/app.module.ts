@@ -7,7 +7,8 @@ import { AdventureModule } from './adventure/adventure.module';
 import { LogModule } from './log/log.module';
 import { Adventure } from './adventure/adventure.entity';
 import { Log } from './log/log.entity';
-import { Member } from './member/member.entity';
+import { Member } from './member/entities/member.entity';
+import { MemberModule } from './member/member.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Member } from './member/member.entity';
     }),
     AdventureModule,
     LogModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [AppService],

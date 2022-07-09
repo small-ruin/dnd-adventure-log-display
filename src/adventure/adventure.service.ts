@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository, FindOptionsWhere } from 'typeorm';
+import { Like, Repository, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { Adventure } from './adventure.entity';
 import { Log } from '../log/log.entity';
 import { ChangeOrderDTO, SearchDTO } from 'src/interface';
+import { Member } from 'src/member/entities/member.entity';
 
 @Injectable()
 export class AdventureService {
@@ -12,18 +13,27 @@ export class AdventureService {
     private readonly repo: Repository<Adventure>,
     @InjectRepository(Log)
     private readonly logRepo: Repository<Log>,
+    @InjectRepository(Member)
+    private readonly memberRepo: Repository<Member>
   ) {}
 
   create(adv): Promise<Adventure[]> {
     return this.repo.save<Adventure>(adv);
   }
 
+  update(id, adv): Promise<UpdateResult> {
+    return this.repo.update(id, adv)
+  }
+
   findAll(): Promise<Adventure[]> {
-    return this.repo.find();
+    return this.repo.find({ relations: { members: true }});
   }
 
   find(id): Promise<Adventure> {
-    return this.repo.findOneBy({id});
+    return this.repo.findOne({
+      where: {id},
+      relations: { members: true }
+    });
   }
 
   async findLogs(id: number): Promise<Log[]> {
@@ -77,5 +87,18 @@ export class AdventureService {
     });
 
     return logs;
+  }
+
+  // members
+  async addPc(id, pc: number) {
+    const adv = await this.find(id)
+    const mem = await this.memberRepo.findOneBy({id: pc}); 
+    adv.members = [...(adv.members || []), mem]
+    return this.repo.save(adv)
+  }
+  async removePc(id, pc: number) {
+    const adv = await this.find(id)
+    adv.members = adv.members.filter(m => m.id !== +pc)
+    return this.repo.save(adv)
   }
 }
